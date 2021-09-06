@@ -32,6 +32,9 @@ jobs:
 
           id=$(echo $content | jq -r '.data.id');
           api_key=$(echo $content | jq -r '.data.api_key');
+
+          echo "mock id: ${id}";
+          echo "mock api_key: ${api_key}"
       - name: test - get poll
         run: >
           curl
