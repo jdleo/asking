@@ -96,6 +96,7 @@ jobs:
           curl
           --request PUT
           -m 1
+          --data '{"option":0}'
           --silent
           --show-error
           --fail
