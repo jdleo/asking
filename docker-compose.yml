@@ -28,3 +28,5 @@ services:
     ports:
       - 8080:3001
     restart: unless-stopped
+    environment:
+      - DATABASE_CONNECTION_STR=postgres://docker:docker@database:5432/docker
