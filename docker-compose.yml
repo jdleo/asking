@@ -29,4 +29,4 @@ services:
       - 8080:3001
     restart: unless-stopped
     environment:
-      - DATABASE_CONNECTION_STR=postgres://docker:docker@database:5432/docker
+      - DATABASE_URI=postgres://docker:docker@database:5432/docker
