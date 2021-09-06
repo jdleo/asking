@@ -1,0 +1,2 @@
+# use lightweight node as base image
+FROM node:alpine
