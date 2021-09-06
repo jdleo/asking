@@ -1,0 +1,127 @@
+name: test
+on: push
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: build docker stack
+        run: docker-compose up -d
+      - name: Sleep for 15 seconds
+        run: sleep 15s
+        shell: bash
+      - name: test - healthcheck
+        run: >
+          curl
+          -m 1
+          --silent
+          --show-error
+          --fail
+          "localhost:8080/healthcheck"
+      - name: test - create poll
+        run: >
+          content=$(curl
+          --request POST
+          -m 1
+          --header "Content-Type: application/json"
+          --data '{"title":"test","options":["a","b","c","d"],"expiration":9999999999999,"limit_ip":true}'
+          --silent
+          --show-error
+          --fail
+          "localhost:8080/poll");
+
+          id=$(echo $content | jq -r '.data.id');
+          api_key=$(echo $content | jq -r '.data.api_key');
+      - name: test - get poll
+        run: >
+          content=$(curl
+          --request POST
+          -m 1
+          --header "Content-Type: application/json"
+          --data '{"title":"test","options":["a","b","c","d"],"expiration":9999999999999,"limit_ip":true}'
+          --silent
+          --show-error
+          --fail
+          "localhost:8080/poll");
+
+          id=$(echo $content | jq -r '.data.id');
+          api_key=$(echo $content | jq -r '.data.api_key');
+
+          curl
+          -m 1
+          --silent
+          --show-error
+          --fail
+          "localhost:8080/poll/${id}"
+      - name: test - update poll
+        run: >
+          content=$(curl
+          --request POST
+          -m 1
+          --header "Content-Type: application/json"
+          --data '{"title":"test","options":["a","b","c","d"],"expiration":9999999999999,"limit_ip":true}'
+          --silent
+          --show-error
+          --fail
+          "localhost:8080/poll");
+
+          id=$(echo $content | jq -r '.data.id');
+          api_key=$(echo $content | jq -r '.data.api_key');
+
+          curl
+          --request PUT
+          -m 1
+          --header "Content-Type: application/json"
+          --header "api_key: ${api_key}"
+          --data '{"expiration":0}'
+          --silent
+          --show-error
+          --fail
+          "localhost:8080/poll/${id}"
+      - name: test - vote on poll
+        run: >
+          content=$(curl
+          --request POST
+          -m 1
+          --header "Content-Type: application/json"
+          --data '{"title":"test","options":["a","b","c","d"],"expiration":9999999999999,"limit_ip":true}'
+          --silent
+          --show-error
+          --fail
+          "localhost:8080/poll");
+
+          id=$(echo $content | jq -r '.data.id');
+          api_key=$(echo $content | jq -r '.data.api_key');
+
+          curl
+          --request PUT
+          -m 1
+          --data '{"option":0}'
+          --silent
+          --show-error
+          --fail
+          "localhost:8080/poll/${id}/vote"
+      - name: test - delete poll
+        run: >
+          content=$(curl
+          --request POST
+          -m 1
+          --header "Content-Type: application/json"
+          --data '{"title":"test","options":["a","b","c","d"],"expiration":9999999999999,"limit_ip":true}'
+          --silent
+          --show-error
+          --fail
+          "localhost:8080/poll");
+
+          id=$(echo $content | jq -r '.data.id');
+          api_key=$(echo $content | jq -r '.data.api_key');
+
+          curl
+          --request DELETE
+          -m 1
+          --header "api_key: ${api_key}"
+          --data '{"expiration":0}'
+          --silent
+          --show-error
+          --fail
+          "localhost:8080/poll/${id}"
