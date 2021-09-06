@@ -37,8 +37,8 @@ services:
       - api
     restart: unless-stopped
     expose:
-      - 3000
+      - 80
     ports:
-      - 3000:3000
+      - 80:80
     environment:
       - API_URI=https://asking.fr:8080
