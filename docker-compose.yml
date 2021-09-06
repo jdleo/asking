@@ -1,0 +1,30 @@
+version: "3"
+
+services:
+
+  database:
+    image: postgres
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_PASSWORD=docker
+      - POSTGRES_USER=docker
+      - POSTGRES_DB=docker
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U docker"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build: ./api
+    links:
+      - database
+    depends_on: 
+      - database
+    restart: on-failure
+    expose:
+      - 8080
+    ports:
+      - 8080:3001
+    restart: unless-stopped
