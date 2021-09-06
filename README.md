@@ -10,3 +10,9 @@ Very lightweight service to create/vote on polls.
 - Docker
 - Docker Compose
 - Github Actions
+
+## Run
+
+```
+docker-compose up
+```
