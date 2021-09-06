@@ -3,8 +3,8 @@ const morgan = require('morgan');
 const cors = require('cors');
 const helmet = require('helmet');
 
-import baseRoute from './routes/base';
-import pollRoute from './routes/poll';
+const baseRoute = require('./routes/base');
+const pollRoute = require('./routes/poll');
 
 // express app
 const app = express();

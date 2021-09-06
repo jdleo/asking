@@ -1,11 +1,11 @@
 const express = require('express');
 
-import {
+const {
   createPoll,
   deletePoll,
   getPoll,
   updatePoll,
-} from '../controller/poll';
+} = require('../controller/poll');
 
 // router
 const router = express.Router();
@@ -16,4 +16,4 @@ router.post('/', createPoll);
 router.put('/:id', updatePoll);
 router.delete('/:id', deletePoll);
 
-export default router;
+module.exports = router;

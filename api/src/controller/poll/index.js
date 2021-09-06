@@ -1,6 +1,6 @@
-import createPoll from './createPoll';
-import deletePoll from './deletePoll';
-import getPoll from './getPoll';
-import updatePoll from './updatePoll';
+const createPoll = require('./createPoll');
+const getPoll = require('./getPoll');
+const updatePoll = require('./updatePoll');
+const deletePoll = require('./deletePoll');
 
-export { createPoll, deletePoll, getPoll, updatePoll };
+module.exports = { createPoll, deletePoll, getPoll, updatePoll };

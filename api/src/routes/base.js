@@ -8,4 +8,4 @@ router.get('/healthcheck', (req, res) => {
   res.status(200).json({ status: 'available' });
 });
 
-export default router;
+module.exports = router;
