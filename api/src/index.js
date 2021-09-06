@@ -2,6 +2,7 @@ const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
 const helmet = require('helmet');
+const requestIp = require('request-ip');
 
 const baseRoute = require('./routes/base');
 const pollRoute = require('./routes/poll');
@@ -18,6 +19,7 @@ app.use(cors());
 app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(requestIp.mw());
 
 // map routes to routers
 app.use('/', baseRoute);
