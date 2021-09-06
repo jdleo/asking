@@ -13,6 +13,7 @@ jobs:
       - name: test - healthcheck
         run: >
           curl
+          -m 1
           --silent
           --show-error
           --fail
@@ -21,6 +22,7 @@ jobs:
         run: >
           curl
           --request POST
+          -m 1
           --header "Content-Type: application/json"
           --data '{"title":"test","options":["a","b","c","d"],"expiration":9999999999999,"limit_ip":true}'
           --silent
