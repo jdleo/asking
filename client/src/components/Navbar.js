@@ -25,9 +25,11 @@ export default function NavbarWrapper() {
 const styles = {
   navbarBig: { paddingLeft: 200, paddingRight: 200 },
   navbarBrand: {
-    color: '#0f0f22',
+    color: '#050505',
+    fontFamily: '-apple-system, BlinkMacSystemFont, sans-serif',
   },
   navbarLink: {
-    color: '#0f0f22',
+    color: '#050505',
+    fontFamily: '-apple-system, BlinkMacSystemFont, sans-serif',
   },
 };
