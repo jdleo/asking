@@ -32,8 +32,7 @@ const deletePoll = (req, res) => {
       }
 
       // delete poll
-      poll
-        .destroy({ where: { id: pollId } })
+      Poll.destroy({ where: { id: pollId } })
         .then(() => {
           return res.status(200).json({
             status: 'success',
