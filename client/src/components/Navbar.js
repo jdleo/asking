@@ -8,7 +8,7 @@ export default function NavbarWrapper() {
   const { width } = useWindowDimensions();
 
   return (
-    <Navbar style={width > 500 ? styles.navbarBig : {}} className='navbar-main'>
+    <Navbar style={width > 500 ? styles.navbarBig : { paddingLeft: 16 }} className='navbar-main'>
       <Navbar.Brand href='/' className='navbar-brand' style={styles.navbarBrand}>
         {process.env['APP_NAME'] ?? 'asking.fr'}
       </Navbar.Brand>
