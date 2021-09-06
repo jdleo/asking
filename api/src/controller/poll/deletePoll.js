@@ -1,4 +1,3 @@
-const db = require('../../connections');
 const Poll = require('../../model/Poll');
 
 /**
