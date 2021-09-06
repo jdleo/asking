@@ -20,7 +20,7 @@ jobs:
           "localhost:8080/healthcheck"
       - name: test - create poll
         run: >
-          curl
+          content=$(curl
           --request POST
           -m 1
           --header "Content-Type: application/json"
@@ -28,4 +28,47 @@ jobs:
           --silent
           --show-error
           --fail
-          "localhost:8080/poll"
+          "localhost:8080/poll");
+
+          id=$(echo $content | jq -r '.data.id');
+          api_key=$(echo $content | jq -r '.data.api_key');
+      - name: test - get poll
+        run: >
+          curl
+          -m 1
+          --silent
+          --show-error
+          --fail
+          "localhost:8080/poll/${id}"
+      - name: test - update poll
+        run: >
+          curl
+          --request PUT
+          -m 1
+          --header "Content-Type: application/json"
+          --header "api_key: ${api_key}"
+          --data '{"expiration":0}'
+          --silent
+          --show-error
+          --fail
+          "localhost:8080/poll/${id}"
+      - name: test - vote on poll
+        run: >
+          curl
+          --request PUT
+          -m 1
+          --silent
+          --show-error
+          --fail
+          "localhost:8080/poll/${id}/vote"
+      - name: test - delete poll
+        run: >
+          curl
+          --request DELETE
+          -m 1
+          --header "api_key: ${api_key}"
+          --data '{"expiration":0}'
+          --silent
+          --show-error
+          --fail
+          "localhost:8080/poll/${id}"
