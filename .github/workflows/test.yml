@@ -6,7 +6,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: build docker stack
-        run: docker-compose up -d
+        run: docker-compose -f docker-compose.prod.yml up -d --build
       - name: Sleep for 15 seconds
         run: sleep 15s
         shell: bash

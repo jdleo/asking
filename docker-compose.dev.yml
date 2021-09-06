@@ -1,7 +1,6 @@
-version: "3"
+version: '3'
 
 services:
-
   database:
     image: postgres
     ports:
@@ -11,7 +10,7 @@ services:
       - POSTGRES_USER=docker
       - POSTGRES_DB=docker
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U docker"]
+      test: ['CMD-SHELL', 'pg_isready -U docker']
       interval: 10s
       timeout: 5s
       retries: 5
@@ -20,13 +19,26 @@ services:
     build: ./api
     links:
       - database
-    depends_on: 
+    depends_on:
       - database
-    restart: on-failure
+    restart: unless-stopped
     expose:
       - 8080
     ports:
       - 8080:3001
-    restart: unless-stopped
     environment:
       - DATABASE_URI=postgres://docker:docker@database:5432/docker
+
+  frontend:
+    build:
+      context: ./client
+      dockerfile: Dockerfile.dev
+    depends_on:
+      - api
+    restart: unless-stopped
+    expose:
+      - 3000
+    ports:
+      - 3000:3000
+    environment:
+      - API_URI=http://localhost:8080

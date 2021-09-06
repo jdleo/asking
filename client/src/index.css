@@ -1,0 +1,9 @@
+.navbar-brand {
+  font-family: '-apple-system, BlinkMacSystemFont, sans-serif';
+  font-size: 2em !important;
+}
+
+.navbar-links {
+  font-family: '-apple-system, BlinkMacSystemFont, sans-serif';
+  font-weight: 600;
+}
