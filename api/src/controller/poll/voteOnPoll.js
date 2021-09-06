@@ -1,3 +1,4 @@
+const db = require('../../connections');
 const Poll = require('../../model/Poll');
 const Vote = require('../../model/Vote');
 const randomId = require('../../helpers/randomId');
@@ -50,7 +51,8 @@ const voteOnPoll = (req, res) => {
           });
         });
     })
-    .catch(() => {
+    .catch(err => {
+      console.error(err);
       res.status(404).json({
         status: 'error',
         error: 'Poll not found with supplied ID.',
