@@ -37,7 +37,7 @@ const getPoll = (req, res) => {
 
       // execute query
       db.query(query, { type: QueryTypes.SELECT })
-        .then(res => {
+        .then(voteData => {
           // return poll data
           return res.status(200).json({
             status: 'success',
@@ -46,7 +46,7 @@ const getPoll = (req, res) => {
               options,
               createdAt,
               expiration,
-              votes: res,
+              votes: voteData,
             },
           });
         })
