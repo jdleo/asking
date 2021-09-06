@@ -9,6 +9,8 @@ const randomId = require('../../helpers/randomId');
 const voteOnPoll = (req, res) => {
   // get poll id from request
   const pollId = req.params.id;
+  // get poll option
+  const option = req.body.option;
 
   // look up associated poll
   Poll.findByPk(pollId)
@@ -30,6 +32,7 @@ const voteOnPoll = (req, res) => {
           return Vote.create({
             id,
             pollId,
+            option,
           });
         })
         .then(vote => {
