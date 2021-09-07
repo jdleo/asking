@@ -41,4 +41,4 @@ services:
     ports:
       - 80:80
     environment:
-      - API_URI=https://asking.fr:8080
+      - API_URI=https://asking.one:8080
