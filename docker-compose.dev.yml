@@ -41,4 +41,4 @@ services:
     ports:
       - 3000:3000
     environment:
-      - API_URI=http://localhost:8080
+      - REACT_APP_API_URI=http://localhost:8080
