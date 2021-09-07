@@ -86,7 +86,7 @@ function Home() {
     };
 
     // post poll data to {API_URI}/poll
-    API_URI =
+    const API_URI =
       process.env.NODE_ENV !== 'production'
         ? process.env.REACT_APP_API_URI
         : 'http://asking.one:8080';
