@@ -1,4 +1,4 @@
-# asking.fr [![build](https://github.com/jdleo/asking/actions/workflows/build.yml/badge.svg)](https://github.com/jdleo/asking/actions/workflows/build.yml) [![test](https://github.com/jdleo/asking/actions/workflows/test.yml/badge.svg)](https://github.com/jdleo/asking/actions/workflows/test.yml)
+# asking.one [![build](https://github.com/jdleo/asking/actions/workflows/build.yml/badge.svg)](https://github.com/jdleo/asking/actions/workflows/build.yml) [![test](https://github.com/jdleo/asking/actions/workflows/test.yml/badge.svg)](https://github.com/jdleo/asking/actions/workflows/test.yml)
 
 Very lightweight service to create/vote on polls.
 
@@ -11,10 +11,16 @@ Very lightweight service to create/vote on polls.
 - Docker Compose
 - Github Actions
 
-## Run
+## Dev
 
 ```
-docker-compose up
+docker-compose -f docker-compose.dev.yml up -d --build;
+```
+
+## Prod
+
+```
+docker-compose -f docker-compose.prod.yml up -d --build;
 ```
 
 ## Benchmarks
