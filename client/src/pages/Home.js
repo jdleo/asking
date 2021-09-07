@@ -91,7 +91,7 @@ function Home() {
         ? process.env.REACT_APP_API_URI
         : 'http://asking.one:8080';
     axios
-      .post(`${process.env.API_URI}/poll`, pollData)
+      .post(`${API_URI}/poll`, pollData)
       .then(res => {
         // make sure status isn't error
         if (res.data.status !== 'success') {
