@@ -86,8 +86,12 @@ function Home() {
     };
 
     // post poll data to {API_URI}/poll
+    API_URI =
+      process.env.NODE_ENV !== 'production'
+        ? process.env.REACT_APP_API_URI
+        : 'http://asking.one:8080';
     axios
-      .post(`${process.env.REACT_APP_API_URI}/poll`, pollData)
+      .post(`${process.env.API_URI}/poll`, pollData)
       .then(res => {
         // make sure status isn't error
         if (res.data.status !== 'success') {
