@@ -10,7 +10,7 @@ export default function NavbarWrapper() {
   return (
     <Navbar style={width > 500 ? styles.navbarBig : { paddingLeft: 16 }} className='navbar-main'>
       <Navbar.Brand href='/' className='navbar-brand' style={styles.navbarBrand}>
-        {process.env['APP_NAME'] ?? 'asking.fr'}
+        {process.env['APP_NAME'] ?? 'asking.one'}
       </Navbar.Brand>
       <Navbar.Toggle />
       <Navbar.Collapse className='justify-content-end navbar-links'>
