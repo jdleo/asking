@@ -60,6 +60,12 @@ function Home() {
       return setError('You must have a title.');
     }
 
+    // check for duplicate answers
+    const uniqueAnswers = [...new Set(filteredAnswers)];
+    if (uniqueAnswers.length !== filteredAnswers.length) {
+      return setError('You cannot have duplicate answers.');
+    }
+
     // get limit_ip
     const limit_ip = limitIp === 'yes';
 
