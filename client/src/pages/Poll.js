@@ -109,6 +109,9 @@ const Poll = () => {
       if (option.votes > max) max = option.votes;
     });
 
+    setTotalVotes(total);
+    setMaxVotes(max);
+
     // vote with put request to {API_URI}/poll/:id
     const API_URI =
       process.env.NODE_ENV !== 'production'
