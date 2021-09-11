@@ -1,31 +1,83 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import axios from 'axios';
+import cookies from 'react-cookies';
 
 const Poll = () => {
   // state mgmt
-  const [title, setTitle] = useState('What is the best option to pick?');
-  const [optionIsHovering, setOptionIsHovering] = useState([false, false, false, false]);
+  const [title, setTitle] = useState('loading...');
+  const [optionIsHovering, setOptionIsHovering] = useState([]);
 
-  const [options, setOptions] = useState([
-    { title: 'a', votes: 19042043 },
-    { title: 'b', votes: 9304093 },
-    { title: 'c', votes: 3728494 },
-    { title: 'd', votes: 7324897 },
-  ]);
+  const [options, setOptions] = useState([]);
 
   const [totalVotes, setTotalVotes] = useState(0);
   const [maxVotes, setMaxVotes] = useState(0);
   const [userVotedOn, setUserVotedOn] = useState(-1);
-  const [expiration, setExpiration] = useState(Date.now() + 5600000);
-
-  // component did mount
-  useEffect(() => {
-    setTotalVotes(options.reduce((acc, curr) => acc + curr.votes, 0));
-    setMaxVotes(options.reduce((acc, curr) => Math.max(acc, curr.votes), 0));
-  });
+  const [expiration, setExpiration] = useState(0);
 
   // get poll id from route params
   let { id } = useParams();
+
+  // helper method to calculate result width
+  const calculateResultWidth = (votes, totalVotes) => {
+    const pct = ((votes / totalVotes) * 100) | 0;
+    console.info(votes, totalVotes, pct);
+    return pct < 7 ? `0%` : `${pct}%`;
+  };
+
+  // component did mount
+  useEffect(() => {
+    // get cookie for if this user voted already
+    const userVoteChoice = cookies.load(id);
+
+    // check if they did vote
+    if (userVoteChoice) {
+      setUserVotedOn(parseInt(userVoteChoice));
+    }
+
+    // get poll data from {API_URI}/poll/:id
+    const API_URI =
+      process.env.NODE_ENV !== 'production'
+        ? process.env.REACT_APP_API_URI || 'http://localhost:8080'
+        : 'http://asking.one:8080';
+
+    axios
+      .get(`${API_URI}/poll/${id}`)
+      .then(res => {
+        const data = res.data.data;
+        // set data
+        setTitle(data.title);
+        setExpiration(data.expiration);
+
+        const voteData = data.options.map(option => ({ title: option, votes: 0 }));
+
+        // go through votes and add to voteData
+        data.votes.forEach(vote => {
+          // find corresponding option in voteData
+          const option = voteData.find(option => option.title === vote.option);
+          // add vote_count to option
+          option.votes = parseInt(vote.vote_count);
+        });
+
+        // set options
+        setOptions(voteData);
+
+        // set optionIsHovering
+        setOptionIsHovering(voteData.map(() => false));
+
+        // set more vote data
+        let total = 0;
+        let max = 0;
+        voteData.forEach(option => {
+          total += option.votes;
+          if (option.votes > max) max = option.votes;
+        });
+
+        setTotalVotes(total);
+        setMaxVotes(max);
+      })
+      .catch(() => {});
+  }, []);
 
   // helper method to handle poll option hover
   const handleOptionHover = (index, hovering) => {
@@ -41,12 +93,37 @@ const Poll = () => {
 
     // update userVotedOn
     setUserVotedOn(index);
+
+    // set in cookies too
+    cookies.save(id, `${index}`);
+
+    // also update vote count locally in state
+    const newOptions = [...options];
+    newOptions[index].votes++;
+    setOptions(newOptions);
+
+    let total = 0;
+    let max = 0;
+    newOptions.forEach(option => {
+      total += option.votes;
+      if (option.votes > max) max = option.votes;
+    });
+
+    // vote with put request to {API_URI}/poll/:id
+    const API_URI =
+      process.env.NODE_ENV !== 'production'
+        ? process.env.REACT_APP_API_URI || 'http://localhost:8080'
+        : 'http://asking.one:8080';
+    axios
+      .put(`${API_URI}/poll/${id}/vote`, { option: options[index].title })
+      .then(() => {})
+      .catch(() => {});
   };
 
   // render expiration countdown
   const renderExpiration = () => {
     let now = new Date();
-    let expirationDate = new Date(expiration);
+    let expirationDate = new Date(parseInt(expiration));
 
     // calculate hours, minutes, seconds
     let hours = Math.floor((expirationDate - now) / 3600000);
@@ -78,21 +155,38 @@ const Poll = () => {
           <span
             className='poll-option-title'
             style={{
-              color: userVotedOn > -1 && option.votes === maxVotes ? '#fff' : '#050505',
-              fontWeight: userVotedOn > -1 && option.votes === maxVotes ? 'bold' : 'normal',
+              color:
+                userVotedOn > -1 && option.votes === maxVotes && maxVotes > 0 ? '#fff' : '#050505',
+              fontWeight:
+                userVotedOn > -1 && option.votes === maxVotes && maxVotes > 0 ? 'bold' : 'normal',
             }}
           >
             {option.title}
           </span>
+          {console.info(option, maxVotes, totalVotes, option.votes / totalVotes)}
           {/** only render result/fill if user did vote already */}
           {userVotedOn > -1 && (
             <>
-              <span className='poll-option-result'>{option.votes.toLocaleString()}</span>
+              <span
+                style={{
+                  color:
+                    userVotedOn > -1 && option.votes === maxVotes && maxVotes > 0
+                      ? '#00cc00'
+                      : '#050505',
+                  fontWeight:
+                    userVotedOn > -1 && option.votes === maxVotes && maxVotes > 0
+                      ? 'bold'
+                      : 'normal',
+                }}
+                className='poll-option-result'
+              >
+                {option.votes.toLocaleString()}
+              </span>
               {/** render fill and width based on win/loss */}
               <div
                 className={option.votes === maxVotes ? 'winner-fill' : 'loser-fill'}
                 style={{
-                  width: `${(option.votes / totalVotes) * 100}%`,
+                  width: calculateResultWidth(option.votes, totalVotes),
                 }}
               />
             </>

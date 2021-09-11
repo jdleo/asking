@@ -17,7 +17,7 @@ const voteOnPoll = (req, res) => {
   Poll.findByPk(pollId)
     .then(poll => {
       // check if expired
-      if (Date.now() > poll.get('expiration')) {
+      if (Date.now() > parseInt(poll.get('expiration'))) {
         return res.status(400).json({
           message: 'Poll has expired.',
         });
