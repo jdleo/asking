@@ -25,16 +25,8 @@ const Poll = () => {
     return pct < 7 ? `0%` : `${pct}%`;
   };
 
-  // component did mount
-  useEffect(() => {
-    // get cookie for if this user voted already
-    const userVoteChoice = cookies.load(id);
-
-    // check if they did vote
-    if (userVoteChoice) {
-      setUserVotedOn(parseInt(userVoteChoice));
-    }
-
+  // helper method to fetch poll results
+  const fetchPollResults = async () => {
     // get poll data from {API_URI}/poll/:id
     const API_URI =
       process.env.NODE_ENV !== 'production'
@@ -77,7 +69,27 @@ const Poll = () => {
         setMaxVotes(max);
       })
       .catch(() => {});
+  };
+
+  // component did mount
+  useEffect(() => {
+    // get cookie for if this user voted already
+    const userVoteChoice = cookies.load(id);
+
+    // check if they did vote
+    if (userVoteChoice) {
+      setUserVotedOn(parseInt(userVoteChoice));
+    }
+
+    fetchPollResults();
+
+    // set an interval to fetch poll results every 2 seconds
+    const interval = setInterval(() => fetchPollResults(), 2000);
+
+    return () => clearInterval(interval);
   }, []);
+
+  // set interval
 
   // helper method to handle poll option hover
   const handleOptionHover = (index, hovering) => {
@@ -119,7 +131,7 @@ const Poll = () => {
         : 'http://asking.one:8080';
     axios
       .put(`${API_URI}/poll/${id}/vote`, { option: options[index].title })
-      .then(() => {})
+      .then(() => fetchPollResults())
       .catch(() => {});
   };
 
