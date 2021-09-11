@@ -69,3 +69,47 @@
   margin-top: 14px;
   margin-bottom: 8px;
 }
+
+.poll-container {
+  margin-top: 50px;
+}
+
+.poll-option {
+  background-color: #e9eef2;
+  border-radius: 60px;
+  height: 60px;
+  width: min(600px, 90%);
+  display: block;
+  margin: auto;
+  margin-top: 16px;
+  margin-bottom: 16px;
+  position: relative;
+  cursor: pointer;
+}
+
+.poll-option-title {
+  position: absolute;
+  left: 30px;
+  top: 18px;
+}
+
+.poll-option-result {
+  position: absolute;
+  right: 30px;
+  top: 18px;
+  font-weight: 600;
+}
+
+.winner-fill {
+  background-color: #0e0d11;
+  height: 100%;
+  float: left;
+  border-radius: 60px;
+}
+
+.loser-fill {
+  background-color: #d3d7dd;
+  height: 100%;
+  float: left;
+  border-radius: 60px;
+}

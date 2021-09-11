@@ -5,7 +5,7 @@ const Poll = require('./Poll');
 // create vote model
 const Vote = db.define('vote', {
   id: { primaryKey: true, type: Sequelize.STRING },
-  option: Sequelize.INTEGER,
+  option: Sequelize.STRING,
 });
 
 // add foreign key relationship to poll

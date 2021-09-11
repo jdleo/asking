@@ -60,6 +60,12 @@ function Home() {
       return setError('You must have a title.');
     }
 
+    // check for duplicate answers
+    const uniqueAnswers = [...new Set(filteredAnswers)];
+    if (uniqueAnswers.length !== filteredAnswers.length) {
+      return setError('You cannot have duplicate answers.');
+    }
+
     // get limit_ip
     const limit_ip = limitIp === 'yes';
 
@@ -88,7 +94,7 @@ function Home() {
     // post poll data to {API_URI}/poll
     const API_URI =
       process.env.NODE_ENV !== 'production'
-        ? process.env.REACT_APP_API_URI
+        ? process.env.REACT_APP_API_URI || 'http://localhost:8080'
         : 'http://asking.one:8080';
     axios
       .post(`${API_URI}/poll`, pollData)
