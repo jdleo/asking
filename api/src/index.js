@@ -21,6 +21,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(requestIp.mw());
 
+// trust proxy
+app.set('trust proxy', 1);
+app.enable('trust proxy');
+
 // map routes to routers
 app.use('/', baseRoute);
 app.use('/poll', pollRoute);

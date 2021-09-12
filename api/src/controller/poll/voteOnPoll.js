@@ -24,7 +24,7 @@ const voteOnPoll = (req, res) => {
       }
 
       // key for this vote is based on limit_ip
-      const id = poll.get('limit_ip') ? req.ip : randomId(16);
+      const id = poll.get('limit_ip') ? `${req.ip}-${pollId}` : randomId(16);
 
       // sync w db
       db.sync()
