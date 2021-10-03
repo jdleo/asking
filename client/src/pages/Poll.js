@@ -27,6 +27,12 @@ const Poll = () => {
 
   // helper method to fetch poll results
   const fetchPollResults = async () => {
+    // check if this poll has expired
+    if (expiration > 0 && Date.now() > expiration) {
+      // set uservoted on to show results and just return
+      return setUserVotedOn(0);
+    }
+
     // get poll data from {API_URI}/poll/:id
     const API_URI =
       process.env.NODE_ENV !== 'production'
@@ -85,13 +91,6 @@ const Poll = () => {
 
     // set an interval to fetch poll results every 2 seconds
     const interval = setInterval(() => fetchPollResults(), 2000);
-
-    // check if expired
-    if (expiration !== 0 && Date.now() > expiration) {
-      // clear interval, and set user voted on to 0 so results are shown
-      clearInterval(interval);
-      setUserVotedOn(0);
-    }
 
     return () => clearInterval(interval);
   }, []);
