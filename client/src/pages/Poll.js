@@ -27,6 +27,12 @@ const Poll = () => {
 
   // helper method to fetch poll results
   const fetchPollResults = async () => {
+    // check if this poll has expired
+    if (expiration > 0 && Date.now() > expiration) {
+      // set uservoted on to show results and just return
+      return setUserVotedOn(0);
+    }
+
     // get poll data from {API_URI}/poll/:id
     const API_URI =
       process.env.NODE_ENV !== 'production'
@@ -157,7 +163,12 @@ const Poll = () => {
     if (hours > 864000) formattedTime = 'Never';
     if (expirationDate - now < 0) formattedTime = 'Expired';
 
-    return <p>Expires: {formattedTime}</p>;
+    // if expired, show 'expired' with red text, otherwise, normal
+    return formattedTime === 'Expired' ? (
+      <p style={{ color: 'red' }}>{formattedTime}</p>
+    ) : (
+      <p>Expires: {formattedTime}</p>
+    );
   };
 
   // helper method to render options
