@@ -156,7 +156,12 @@ const Poll = () => {
     if (hours > 864000) formattedTime = 'Never';
     if (expirationDate - now < 0) formattedTime = 'Expired';
 
-    return <p>Expires: {formattedTime}</p>;
+    // if expired, show 'expired' with red text, otherwise, normal
+    return formattedTime === 'Expired' ? (
+      <p style={{ color: 'red' }}>{formattedTime}</p>
+    ) : (
+      <p>Expires: {formattedTime}</p>
+    );
   };
 
   // helper method to render options
