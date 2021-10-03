@@ -86,6 +86,13 @@ const Poll = () => {
     // set an interval to fetch poll results every 2 seconds
     const interval = setInterval(() => fetchPollResults(), 2000);
 
+    // check if expired
+    if (expiration !== 0 && Date.now() > expiration) {
+      // clear interval, and set user voted on to 0 so results are shown
+      clearInterval(interval);
+      setUserVotedOn(0);
+    }
+
     return () => clearInterval(interval);
   }, []);
 
@@ -101,7 +108,7 @@ const Poll = () => {
   // helper method to handle poll option click
   const handleOptionClick = index => {
     // if user has already voted on this poll, do nothing
-    if (userVotedOn !== -1) return;
+    if (userVotedOn > -1) return;
 
     // update userVotedOn
     setUserVotedOn(index);
