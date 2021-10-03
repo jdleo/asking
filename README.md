@@ -14,24 +14,25 @@ Very lightweight service to create/vote on polls.
 ## Dev
 
 ```
-docker-compose -f docker-compose.dev.yml up -d --build;
+docker-compose -f docker-compose.dev.yml up -d --build
 ```
 
 ## Prod
 
 ```
-docker-compose -f docker-compose.prod.yml up -d --build;
+docker-compose -f docker-compose.prod.yml up -d --build
 ```
 
 ## Benchmarks
 
-Performed against API, locally while running in Docker stack. Benchmarks performed using k6.
-Keep in mind, this is a single express service, and a single postgres service. To scale this further, convert docker-compose to a Kubernetes stack, and have express/postgres autoscaled.
+- Performed against the API which is running in a Docker container
+- Using [K6](https://github.com/grafana/k6) for load testing
+- Running on a machine with: ubuntu 21.04, 1gb ram, 1vcore
 
-```
-healthcheck - 347.043365 req/s
-create poll - 66.305728 req/s
-retrieve poll (w/ no votes) - 137.023795 req/s
-retrieve poll (w/ 5000 votes) - 100.389343 req/s
-vote on poll - 64.010983 req/s
-```
+|              action              | requests/second |
+| :------------------------------: | :-------------: |
+|           healthcheck            |       998       |
+|           create poll            |       91        |
+|   retrieve poll (has 0 votes)    |       234       |
+| retrieve poll (has 10,000 votes) |       270       |
+|           vote on poll           |       88        |
